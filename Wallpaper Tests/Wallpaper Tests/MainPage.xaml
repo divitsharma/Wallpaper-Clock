@@ -1,0 +1,132 @@
+﻿<Page
+    x:Class="Wallpaper_Tests.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Wallpaper_Tests"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d" Width="905">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState x:Name="wideState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="900" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!--   <Setter Target="imagesPanel.Width" Value="700" />-->
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="narrowState">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!-- <Setter Target="imagesPanel.Width" Value="500" /> -->
+
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+
+        <StackPanel x:Name="contentPanel" Margin="20,30,0,0">
+            <TextBlock HorizontalAlignment="Center" Text="Wall Clock" FontSize="36"/>
+            <StackPanel Orientation="Horizontal" >
+                <StackPanel Width="300">
+                    <StackPanel x:Name="ChoosePicPanel"
+                            Orientation="Vertical" Height="278" BorderThickness="2" 
+                            BorderBrush="#FF6C6C6C" Background="Black"
+                            Margin="0,0,10,0" Padding="5,0,5,0">
+                        <Canvas Height="150" Width="250" Background="Black" Opacity="0.5">
+                            <Image x:Name="selectImg" Height="140" Width="250" Margin="0,10,0,0"
+                                Source="Assets/imgIconBackground.png" Stretch="UniformToFill">
+                            </Image>
+                            <Button x:Name="inputButton" Click="ChooseFile"
+                                Height="140" Width="250" Margin="0,10,0,0"/>
+                        </Canvas>
+
+                        <TimePicker Header="Switch-in Time" HorizontalAlignment="Center"
+                                Margin="0,10,0,0" ClockIdentifier="24HourClock" 
+                                x:Name="selectTime" Width="250"/>
+                        <Button x:Name="Btn_Add" Content="Add" Margin="0,10,0,0"  HorizontalAlignment="Center"
+                                Width="250" Background="#FF45B62C" Click="Button_Add" />
+                    </StackPanel>
+                    <StackPanel x:Name="SettingsPanel" Width="280">
+                        <TextBlock x:Name="greetingOutput" Text="Add Pictures Above" Margin="0,5,0,0"
+                                   Style="{StaticResource BaseTextBlockStyle}" FontSize="18"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="startTaskButton" Margin="0,10" Content="Start Background Task" Click="startTaskButton_Click"/>
+                            <Button Width="50" Content="X" Margin="50,0,0,0" Background="#FFD83737" Foreground="White" Click="Button_Click" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Starting wall number:" Margin="0,0,62,10" />
+                            <ComboBox ItemsSource="{x:Bind numList}" SelectionChanged="ComboBox_SelectionChanged"/>
+                        </StackPanel>
+
+                        <Button x:Name="StopTask" Content="Stop Task" Margin="0, 10" Width="265" Click="StopTask_Click" />
+                    </StackPanel>
+                </StackPanel>
+
+                <ListView x:Name="imagesPanel" Margin="0,0,0,20" Height="430" Width="200"
+                      ScrollViewer.HorizontalScrollMode="Disabled"
+                      ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                      ScrollViewer.IsHorizontalRailEnabled="False"
+                          ScrollViewer.IsVerticalRailEnabled="True"
+                      ScrollViewer.VerticalScrollMode="Enabled"
+                      ItemsSource="{x:Bind wallpapers}">
+
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="local:Wallpaper">
+                            <StackPanel Orientation="Vertical" Height="150">
+                                <!--   <Image Height="150" Width="250" Source="{x:Bind imgSource}"/> -->
+                                <TextBlock HorizontalAlignment="Left"
+                                       Margin="10,10,0,0" Text="{x:Bind fileName}" />
+                                <TextBlock HorizontalAlignment="Left"
+                                       Margin="10,10,0,0" Text="Switch-in Time:"/>
+                                <TextBlock HorizontalAlignment="Center"
+                                       Margin="10,10,10,10" Text="{x:Bind time}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <StackPanel x:Name="ChooseWeatherPicsPanel"
+                            Orientation="Vertical" Height="300" BorderThickness="2" 
+                            BorderBrush="#FF6C6C6C" Background="Black"
+                            Margin="0,0,10,0" Padding="5,0,5,0" VerticalAlignment="Top">
+                    <Canvas Height="150" Width="250" Background="Black" Opacity="0.5">
+                        <Image x:Name="selectRainImg" Height="140" Width="250" Margin="0,10,0,0"
+                                Source="Assets/imgIconBackground.png" Stretch="UniformToFill" />
+                        <Button x:Name="inputRainButton" 
+                                Height="140" Width="250" Margin="0,10,0,0" Click="inputRainButton_Click"/>
+                        <Button x:Name="deleteRainBtn" Content="X" HorizontalAlignment="Left" Margin="0,110,0,0" Click="deleteRainBtn_Click" />
+                        <TextBlock x:Name="rainPicName" Text="Choose Picture" Margin="10,20" />
+                    </Canvas>
+
+                    <Canvas Height="150" Width="250" Background="Black" Opacity="0.5">
+                        <Image x:Name="selectSnowImg" Height="140" Width="250" Margin="0,10,0,0"
+                                Source="Assets/imgIconBackground.png" Stretch="UniformToFill" />
+                        <Button x:Name="inputSnowButton"
+                                Height="140" Width="250" Margin="0,10,0,0" Click="inputSnowButton_Click"/>
+                        <TextBlock x:Name="snowPicName" Text="Choose Picture" Margin="10,20" />
+                        <Button x:Name="deleteSnowBtn" Content="X" HorizontalAlignment="Left" Margin="0,110,0,0" Click="deleteSnowBtn_Click" />
+
+                    </Canvas>
+
+                </StackPanel>
+                <Button x:Name="TestWeather" Content="TestWeather" Click="TestWeather_Click" />
+
+            </StackPanel>
+
+        </StackPanel>
+    </Grid>
+</Page>
